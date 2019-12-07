@@ -192,9 +192,10 @@ public class BienController {
 
     @RequestMapping(value = "/findBien/{id}", method = RequestMethod.GET)
     public ResponseData findBien(Locale locale,@ModelAttribute Bien bien,@PathVariable int id, BindingResult result,HttpServletRequest request){
+        DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Bien ci = bienService.findById(id);
         List<BienAttachment> bienAttachmentList = bienAttachmentService.findByBien(ci);
-       // System.out.println("bienAttachmentList "+bienAttachmentList);
+        ci.setBuyDateTransient(sdf.format(ci.getDate()));
 
         if(ci.getImage() != null){
             byte[] encodeBase64 = Base64.encodeBase64(ci.getImage());

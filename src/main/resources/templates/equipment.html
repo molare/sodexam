@@ -376,6 +376,9 @@
                         $("#editDesignationId").val(response.data.designation);
                         $("#editCostId").val(response.data.acquisitionCost);
                         $("#editCommentaryId").val(response.data.commentary);
+                        $("#editBuyDateId").val(response.data.buyDateTransient);
+                        $("#editTransportId").val(response.data.transport);
+                         $("#editEtatId").val(response.data.etat);
                         editMultipleFile(response);
 
                         $("#editBienForm").append('<input type="hidden" name="id" id="Bien_edit_id" value="'+response.data.id+'"/>');
@@ -392,6 +395,9 @@
                             var code =$("#editCodeId").val();
                             var commentary =$("#editCommentaryId").val();
                             var cptAttachment = $("#cptAttachment").val();
+                            var date = $("#editBuyDateId").val();
+                            var transport = $("#editTransportId").val();
+                            var etat = $("#editEtatId").val();
 
 
                             if(designation === "") {
@@ -400,6 +406,31 @@
                             } else {
                                 $("#editDesignationId").closest('.col-md-4').removeClass('has-error');
                                 $("#editDesignationId").closest('.col-md-4').addClass('has-success');
+                            }
+
+
+                            if(date === "") {
+                                $("#editBuyDateId").closest('.col-md-4').addClass('has-error');
+                                $("#editBuyDateId").after('<p class="text-danger">Champs vide</p>');
+                            }else {
+                                $("#editBuyDateId").closest('.col-md-4').removeClass('has-error');
+                                $("#editBuyDateId").closest('.col-md-4').addClass('has-success');
+                            }
+
+                            if(transport === "") {
+                                $("#editTransportId").closest('.col-md-4').addClass('has-error');
+                                $("#editTransportId").after('<p class="text-danger">Champs vide</p>');
+                            }else {
+                                $("#editTransportId").closest('.col-md-4').removeClass('has-error');
+                                $("#editTransportId").closest('.col-md-4').addClass('has-success');
+                            }
+
+                            if(etat === "") {
+                                $("#editEtatId").closest('.col-md-4').addClass('has-error');
+                                $("#editEtatId").after('<p class="text-danger">Champs vide</p>');
+                            }else {
+                                $("#editEtatId").closest('.col-md-4').removeClass('has-error');
+                                $("#editEtatId").closest('.col-md-4').addClass('has-success');
                             }
 
 
@@ -421,7 +452,7 @@
                             }
 
                              var edit_form_data = new FormData($('#editBienForm')[0]);
-                            if(designation && cost &&code !=""){
+                            if(designation && cost &&code && etat && transport && date !=""){
                                 var idBien =$("#Bien_edit_id").val();
                                // alert(cptAttachment);
                                 $.ajax({
@@ -1230,6 +1261,15 @@
                         <label class="control-label col-md-2">Etat</label>
                         <div class="col-md-4">
                             <input name="etat" id="editEtatId" class="form-control" type="text">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="control-label col-md-2">Date achat</label>
+                        <div class="input-group col-md-4">
+                            <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                            <input class="form-control" id="editBuyDateId" name="buyDate"/>
                             <span class="help-block"></span>
                         </div>
                     </div>
