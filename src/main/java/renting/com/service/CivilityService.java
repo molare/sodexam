@@ -1,7 +1,6 @@
 package renting.com.service;
 
 import renting.com.entities.Civility;
-
 import java.util.List;
 
 /**
@@ -13,4 +12,5 @@ public interface CivilityService {
     public Civility update(Civility Civility);
     public Civility findById(int id);
     public void delete(int id);
+    public void sendmail(String toEmail, String subject, String message);
 }

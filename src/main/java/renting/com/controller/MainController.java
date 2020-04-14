@@ -16,49 +16,44 @@ public class MainController {
         return "index";
     }
 
+    @RequestMapping(value = "/function", method = RequestMethod.GET)
+    public String function(Model model){
+        return "fonction";
+    }
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-     public String login(Model model){
-        return "lockscreen";
+       public String login(Model model){
+        return "login";
     }
 
-   /* @RequestMapping(value = "/com", method = RequestMethod.GET)
-    public String com(Model model){
-        return "commune";
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String test(Model model){
+        return "test";
     }
 
-    @RequestMapping(value = "/city", method = RequestMethod.GET)
-    public String city(Model model){
-        return "quartier";
-    }*/
-
-    @RequestMapping(value = "/equipment", method = RequestMethod.GET)
-    public String equipment(Model model){
-        return "equipment";
+    @RequestMapping(value = "/invoice", method = RequestMethod.GET)
+    public String invoice(Model model){
+        return "invoice";
     }
 
-    @RequestMapping(value = "/renting", method = RequestMethod.GET)
-    public String log(Model model){
-        return "renting";
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public String user(Model model){
+        return "user";
     }
 
-    @RequestMapping(value = "/moyenPay", method = RequestMethod.GET)
-    public String moyenPay(Model model){
-        return "moyenpay";
+    @RequestMapping(value = "/role", method = RequestMethod.GET)
+    public String role(Model model){
+        return "role";
     }
 
-    @RequestMapping(value = "/statutPay", method = RequestMethod.GET)
-    public String statutPay(Model model){
-        return "statutpay";
+    @RequestMapping(value = "/direction", method = RequestMethod.GET)
+    public String direction(Model model){
+        return "direction";
     }
 
-    /*@RequestMapping(value = "/typePay", method = RequestMethod.GET)
-    public String typePaye(Model model){
-        return "typepay";
-    }*/
-
-    @RequestMapping(value = "/customer", method = RequestMethod.GET)
-    public String locataire(Model model){
-        return "customer";
+    @RequestMapping(value = "/statut", method = RequestMethod.GET)
+    public String statut(Model model){
+        return "statut";
     }
 
     @RequestMapping(value = "/civility", method = RequestMethod.GET)
@@ -66,20 +61,21 @@ public class MainController {
         return "civility";
     }
 
-    @RequestMapping(value = "/reporting", method = RequestMethod.GET)
-    public String report(Model model){
-        return "reporting";
+
+    @RequestMapping(value = "/provider", method = RequestMethod.GET)
+    public String provider(Model model){
+        return "provider";
     }
 
-    @RequestMapping(value = "/spent", method = RequestMethod.GET)
-    public String spent(Model model){
-        return "spent";
+
+    @RequestMapping(value = "/category", method = RequestMethod.GET)
+    public String category(Model model){
+        return "category";
     }
 
-    /*@RequestMapping(value = "/twon", method = RequestMethod.GET)
-      public String twon(Model model){
-        return "twon";
-    }*/
+
+
+
 
 
 

@@ -1,8 +1,7 @@
 package renting.com.dataTableResponse;
 
 
-import renting.com.entities.Bien;
-import renting.com.entities.BienAttachment;
+import renting.com.entities.*;
 
 import java.util.List;
 
@@ -16,8 +15,7 @@ public class ResponseData {
     private Object firstData;
     private Object secondData;
     private Object thirtyData;
-    private Bien bien;
-    private List<BienAttachment> bienAttachment;
+
 
     public ResponseData(boolean status, Object data) {
         this.status = status;
@@ -30,18 +28,6 @@ public class ResponseData {
         this.data = data;
     }
 
-    public ResponseData(boolean status, Object data, String message, List<BienAttachment> bienAttachment) {
-        this.status = status;
-        this.data = data;
-        this.message = message;
-        this.bienAttachment = bienAttachment;
-    }
-
-    public ResponseData(boolean status, Bien bien, Object data) {
-        this.status = status;
-        this.bien = bien;
-        this.data = data;
-    }
 
   /*public ResponseData(boolean status, Object data, Object secondData, Object thirtyData) {
         this.status = status;
@@ -56,6 +42,8 @@ public class ResponseData {
         this.secondData = secondData;
         this.thirtyData = thirtyData;
     }
+
+
 
     public boolean isStatus() {
         return status;
@@ -106,21 +94,6 @@ public class ResponseData {
         this.firstData = firstData;
     }
 
-    public Bien getBien() {
-        return bien;
-    }
-
-    public void setBien(Bien bien) {
-        this.bien = bien;
-    }
-
-    public List<BienAttachment> getBienAttachment() {
-        return bienAttachment;
-    }
-
-    public void setBienAttachment(List<BienAttachment> bienAttachment) {
-        this.bienAttachment = bienAttachment;
-    }
 
     @Override
     public String toString() {

@@ -1,7 +1,6 @@
 package renting.com.repositories;
 
 import renting.com.entities.Civility;
-import renting.com.entities.Commune;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

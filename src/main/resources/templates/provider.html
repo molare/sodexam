@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Gestion</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"href="/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- dataTables css -->
+    <link href="/plugins/datatables/dataTables.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/plugins/data-tables/datatables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/plugins/data-tables/responsive.datatables.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Select2 -->
+    <script src="/plugins/select2/js/select2.full.min.js"></script>
+
+    <script src="/plugins/moment/moment.min.js"></script>
+    <script src="/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
+    <!-- dataTables js -->
+    <script src="/plugins/data-tables/jquery.datatables.min.js" type="text/javascript"></script>
+    <script src="/plugins/data-tables/datatables.bootstrap4.min.js" type="text/javascript"></script>
+    <script src="/plugins/data-tables/datatables.responsive.min.js" type="text/javascript"></script>
+    <!-- SweetAlert2 -->
+    <script src="/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <!-- Toastr -->
+    <script src="/plugins/toastr/toastr.min.js"></script>
+    <script src="/plugins/toast.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="/dist/js/demo.js"></script>
+    <!-- page script -->
+    <!-- PAGE LEVEL SCRIPTS-->
+    <script type="text/javascript">
+
+        var table;
+        $(document).ready(function(){
+            //$('#loadingId').hide();
+            $('[data-mask]').inputmask()
+            table= $('#agentTable').DataTable({
+                "responsive": true,
+                "autoWidth":false,
+                "sAjaxSource":window.origin+'/listAgent',
+                "sAjaxDataProp":"data",
+                "oLanguage": {
+                    "sLengthMenu": "_MENU_ Enregistrements",
+                    "sSearch":"<span class='add-on'><i class='fa fa-search'></i></span>Recherche",
+                    "sZeroRecords": "Aucun résultat",
+                    "sInfo": "Affichage de _START_ à _END_ sur _TOTAL_",
+                    "sInfoEmpty": "Affichage de 0 à 0 sur 0 Enregistrements",
+                    "oPaginate": {
+                        "sNext": 'Suivant',
+                        "sPrevious": 'Précèdent',
+                    },
+                    "select": {
+                        "rows": {
+                            "_": " %d ligne sélectionnée(s)",
+                            "1": "1 ligne sélectionnée"
+                        }
+                    }
+                },
+                "aLengthMenu": [
+                    [10, 25, 100, -1],
+                    [10, 25, 100, " Tous"]
+                ],
+                "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">',
+
+                "aaSorting": [
+                    [0, 'desc'],
+                    [1, 'asc']
+                ], "columns":[
+                    {"data":"id"},
+                    {"data":"dateTransient"},
+                    {"data":"matricule"},
+                    {"data":"firstName"},
+                    {"data":"lastName"},
+                    {"data":"birthDate"},
+                    {"data":"phone"},
+                    {"data":"statutTransient"},
+                    {"data":"age"},
+                    {"data":"fonctionTransient"},
+                    {"data":"categoryTransient"},
+                    {"data":"directionTransient"},
+                    {"data":"email"},
+                    //{"data":"checkboxe"},
+                    {"data":"imageTransient"},
+                    {"data":"action"}
+
+                ],
+                'columnDefs': [{
+                    'className': 'select-checkbox',
+                    'targets': 0,
+                    'checkboxes': {
+                        'selectRow': true
+                    }
+                }],
+                'select': {
+                    'style': 'multi'
+                }
+
+            });
+            //FIN DATATABLE
+
+            //IF OPEN MODAL
+            $("#btnAddNew").click(function(){
+
+                $("#agentFormId")[0].reset();
+                $(".col-md-4").removeClass('has-error').removeClass('has-success');
+                $(".text-danger").remove();
+                //$('#loadingId').hide();
+                $(".messages").html("");
+                civilityOption();
+                fonctionOption();
+                categoryOption();
+                statutOption();
+                directionOption();
+
+            });
+
+            //FONCTION ADD DEVIS
+            $("#dd").click( function(){
+
+               $(".text-danger").remove();
+                $(".col-md-4").removeClass('has-error').removeClass('has-success');
+                // validation
+                var firstName = $("#firstNameId").val();
+                var lastName = $("#lastNameId").val();
+                var email= $("#emailId").val();
+                var phone= $("#phoneId").val();
+                var civility = $("#civilityId").val();
+                var mat = $("#matriculeId").val();
+                var birthDate =$("#birthDateId").val();
+                var startJobDate = $("#startJobDateId").val();
+                var fonction = $("#fonctionId").val();
+                var statut = $("#statutId").val();
+                var direction = $("#directionId").val();
+                var category = $("#categoryId").val();
+
+                if(firstName === "") {
+                    $("#firstNameId").closest('.col-md-4').addClass('has-error');
+                    $("#firstNameId").after('<p class="text-danger">Champs vide</p>');
+                } else {
+                    $("#firstNameId").closest('.col-md-4').removeClass('has-error');
+                    $("#firstNameId").closest('.col-md-4').addClass('has-success');
+                }
+
+                if(lastName === "") {
+                    $("#lastNameId").closest('.col-md-4').addClass('has-error');
+                    $("#lastNameId").after('<p class="text-danger">Champs vide</p>');
+                }else {
+                    $("#lastNameId").closest('.col-md-4').removeClass('has-error');
+                    $("#lastNameId").closest('.col-md-4').addClass('has-success');
+                }
+
+               if(mat === "") {
+                    $("#matriculeId").closest('.col-md-4').addClass('has-error');
+                    $("#matriculeId").after('<p class="text-danger">Champs vide</p>');
+                }else {
+                    $("#matriculeId").closest('.col-md-4').removeClass('has-error');
+                    $("#matriculeId").closest('.col-md-4').addClass('has-success');
+                }
+
+                if(birthDate === "") {
+                    $("#birthDateId").closest('.col-md-4').addClass('has-error');
+                    $("#birthDateId").after('<p class="text-danger">Champs vide</p>');
+                }else {
+                    $("#birthDateId").closest('.col-md-4').removeClass('has-error');
+                    $("#birthDateId").closest('.col-md-4').addClass('has-success');
+                }
+
+                if(startJobDate === "") {
+                    $("#startJobDateId").closest('.col-md-4').addClass('has-error');
+                    $("#startJobDateId").after('<p class="text-danger">Champs vide</p>');
+                }else {
+                    $("#startJobDateId").closest('.col-md-4').removeClass('has-error');
+                    $("#startJobDateId").closest('.col-md-4').addClass('has-success');
+                }
+
+                if(fonction === "0") {
+                    $("#fonctionId").closest('.col-md-4').addClass('has-error');
+                    $("#fonctionId").after('<p class="text-danger">Champs vide</p>');
+                }else {
+                    $("#fonctionId").closest('.col-md-4').removeClass('has-error');
+                    $("#fonctionId").closest('.col-md-4').addClass('has-success');
+                }
+
+
+                if(statut === "0") {
+                    $("#statutId").closest('.col-md-4').addClass('has-error');
+                    $("#statutId").after('<p class="text-danger">Champs vide</p>');
+                }else {
+                    $("#statutId").closest('.col-md-4').removeClass('has-error');
+                    $("#statutId").closest('.col-md-4').addClass('has-success');
+                }
+
+                if(direction === "0") {
+                    $("#directionId").closest('.col-md-4').addClass('has-error');
+                    $("#directionId").after('<p class="text-danger">Champs vide</p>');
+                }else {
+                    $("#directionId").closest('.col-md-4').removeClass('has-error');
+                    $("#directionId").closest('.col-md-4').addClass('has-success');
+                }
+
+                if(category === "0") {
+                    $("#categoryId").closest('.col-md-4').addClass('has-error');
+                    $("#categoryId").after('<p class="text-danger">Champs vide</p>');
+                }else {
+                    $("#categoryId").closest('.col-md-4').removeClass('has-error');
+                    $("#categoryId").closest('.col-md-4').addClass('has-success');
+                }
+
+                if(phone === "") {
+                    $("#phoneId").closest('.col-md-4').addClass('has-error');
+                    $("#phoneId").after('<p class="text-danger">Champs vide</p>');
+                }else {
+                    $("#phoneId").closest('.col-md-4').removeClass('has-error');
+                    $("#phoneId").closest('.col-md-4').addClass('has-success');
+                }
+                if(civility === "0") {
+                    $("#civilityId").closest('.col-md-4').addClass('has-error');
+                    $("#civilityId").after('<p class="text-danger">Champs vide</p>');
+                }else {
+                    $("#civilityId").closest('.col-md-4').removeClass('has-error');
+                    $("#civilityId").closest('.col-md-4').addClass('has-success');
+                }
+                var form_data = new FormData($("#agentFormId")[0]);
+
+
+               if(firstName && lastName && phone && mat && startJobDate && birthDate !=""
+               && civility && fonction && direction && statut && category !="0"){
+
+                    $.ajax({
+                        url: window.origin+'/saveAgent',
+                        type: 'POST',
+                        data:form_data,
+                        processData : false,
+                        contentType:false,
+                        dataType: "json",
+                        /*beforeSend: function() {
+                         $('#loadingId').show();
+                         },*/
+                        success: function (response) {
+                            console.log(response);
+                            // remove the error
+                            $(".form-group").removeClass('has-error').removeClass('has-success');
+                            if (response.status === true) {
+                                showAddToast();
+                                $("#agentFormId")[0].reset();
+                                $("#addagentModal").modal("hide");
+                                table.ajax.reload(null, false);
+                            }else{
+                                if (response.data != null) {
+                                    showErrorToast();
+                                    $(".messages").html('<div class="alert alert-danger alert-dismissable fade show">' +
+                                            '<button class="close" data-dismiss="alert" aria-label="Close">×</button><strong>ERREUR!</strong> ' + response.data.cause.serverErrorMessage.detail +
+                                            '</div>');
+
+                                }else{
+                                    showErrorToast();
+                                    $(".messages").html('<div class="alert alert-danger alert-dismissable fade show">' +
+                                            '<button class="close" data-dismiss="alert" aria-label="Close">×</button><strong>ERREUR!</strong> ' + response.message +
+                                            '</div>');
+
+                                }
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+
+                        }
+                    });
+                }
+                return false;
+
+            });
+
+            //FIN ADD DEVIS
+        });
+
+
+        //FUNCTION UPDATE DEVIS
+        function editAgent(id){
+            if(id) {
+                // remove the error
+                $(".col-md-4").removeClass('has-error').removeClass('has-success');
+                $(".text-danger").remove();
+                // empty the message div
+                $(".edit-messages").html("");
+                // $("#editPicture").val('');
+                $('#editLoadingId').hide();
+                // remove the id
+                $("#devis_edit_id").remove();
+                // fetch the member data
+                $.ajax({
+                    url:window.origin+'/findAgent/'+id,
+                    type: 'get',
+                    dataType: 'json',
+                    success:function(response) {
+                        console.log(response);
+
+                        $("#editPictureId").html(response.data.imageTransient);
+                        $("#editfirstNameId").val(response.data.firstName);
+                        $("#editlastNameId").val(response.data.lastName);
+                        $("#editemailId").val(response.data.email);
+                        $("#editphoneId").val(response.data.phone);
+                        $("#editbirthDateId").val(response.data.birthDate);
+                        $("#editstartJobDateId").val(response.data.startJobDate);
+                        $("#editmatriculeId").val(response.data.matricule);
+                        editCivilityOption(response.data.civility.id,response.data.civility.name);
+                        editFonctionOption(response.data.fonction.id,response.data.fonction.name);
+                        editStatutOption(response.data.satut.id,response.data.satut.name);
+                        editCategoryOption(response.data.category.id,response.data.category.name);
+                        editDirectionOption(response.data.direction.id,response.data.direction.name);
+
+
+                        $("#editagentForm").append('<input type="hidden" name="id" id="devis_edit_id" value="'+response.data.id+'"/>');
+                        // here update the member data
+                        $("#btnUpdateagentId").unbind('click').bind('click', function(){
+
+                            // remove error messages
+                            $(".text-danger").remove();
+
+                            var firstName = $("#editfirstNameId").val();
+                            var lastName = $("#editlastNameId").val();
+                            var email= $("#editemailId").val();
+                            var phone= $("#editphoneId").val();
+                            var civility = $("#editCivilityId").val();
+                            var mat = $("#editmatriculeId").val();
+                            var birthDate =$("#editbirthDateId").val();
+                            var startJobDate = $("#editstartJobDateId").val();
+                            var fonction = $("#editfonctionId").val();
+                            var statut = $("#editstatutId").val();
+                            var direction = $("#editdirectionId").val();
+                            var category = $("#editcategoryId").val();
+
+                            if(firstName === "") {
+                                $("#editfirstNameId").closest('.col-md-4').addClass('has-error');
+                                $("#editfirstNameId").after('<p class="text-danger">Champs vide</p>');
+                            } else {
+                                $("#editfirstNameId").closest('.col-md-4').removeClass('has-error');
+                                $("#editfirstNameId").closest('.col-md-4').addClass('has-success');
+                            }
+
+                            if(lastName === "") {
+                                $("#lastNameId").closest('.col-md-4').addClass('has-error');
+                                $("#lastNameId").after('<p class="text-danger">Champs vide</p>');
+                            }else {
+                                $("#lastNameId").closest('.col-md-4').removeClass('has-error');
+                                $("#lastNameId").closest('.col-md-4').addClass('has-success');
+                            }
+
+                            /*if(email === "") {
+                                $("#editemailId").closest('.col-md-4').addClass('has-error');
+                                $("#editemailId").after('<p class="text-danger">Champs vide</p>');
+                            }else {
+                                $("#editemailId").closest('.col-md-4').removeClass('has-error');
+                                $("#editemailId").closest('.col-md-4').addClass('has-success');
+                            }*/
+
+                            if(mat === "") {
+                                $("#editmatriculeId").closest('.col-md-4').addClass('has-error');
+                                $("#editmatriculeId").after('<p class="text-danger">Champs vide</p>');
+                            }else {
+                                $("#editmatriculeId").closest('.col-md-4').removeClass('has-error');
+                                $("#editmatriculeId").closest('.col-md-4').addClass('has-success');
+                            }
+
+                            if(birthDate === "") {
+                                $("#editbirthDateId").closest('.col-md-4').addClass('has-error');
+                                $("#editbirthDateId").after('<p class="text-danger">Champs vide</p>');
+                            }else {
+                                $("#birthDateId").closest('.col-md-4').removeClass('has-error');
+                                $("#birthDateId").closest('.col-md-4').addClass('has-success');
+                            }
+
+                            if(startJobDate === "") {
+                                $("#editstartJobDateId").closest('.col-md-4').addClass('has-error');
+                                $("#editstartJobDateId").after('<p class="text-danger">Champs vide</p>');
+                            }else {
+                                $("#editstartJobDateId").closest('.col-md-4').removeClass('has-error');
+                                $("#editstartJobDateId").closest('.col-md-4').addClass('has-success');
+                            }
+
+                            if(fonction === "0") {
+                                $("#editfonctionId").closest('.col-md-4').addClass('has-error');
+                                $("#editfonctionId").after('<p class="text-danger">Champs vide</p>');
+                            }else {
+                                $("#editfonctionId").closest('.col-md-4').removeClass('has-error');
+                                $("#editfonctionId").closest('.col-md-4').addClass('has-success');
+                            }
+
+
+                            if(statut === "0") {
+                                $("#editstatutId").closest('.col-md-4').addClass('has-error');
+                                $("#editstatutId").after('<p class="text-danger">Champs vide</p>');
+                            }else {
+                                $("#editstatutId").closest('.col-md-4').removeClass('has-error');
+                                $("#editstatutId").closest('.col-md-4').addClass('has-success');
+                            }
+
+                            if(direction === "0") {
+                                $("#editdirectionId").closest('.col-md-4').addClass('has-error');
+                                $("#editdirectionId").after('<p class="text-danger">Champs vide</p>');
+                            }else {
+                                $("#editdirectionId").closest('.col-md-4').removeClass('has-error');
+                                $("#editdirectionId").closest('.col-md-4').addClass('has-success');
+                            }
+
+                            if(category === "0") {
+                                $("#editcategoryId").closest('.col-md-4').addClass('has-error');
+                                $("#editcategoryId").after('<p class="text-danger">Champs vide</p>');
+                            }else {
+                                $("#editcategoryId").closest('.col-md-4').removeClass('has-error');
+                                $("#editcategoryId").closest('.col-md-4').addClass('has-success');
+                            }
+
+                            if(phone === "") {
+                                $("#editphoneId").closest('.col-md-4').addClass('has-error');
+                                $("#editphoneId").after('<p class="text-danger">Champs vide</p>');
+                            }else {
+                                $("#editphoneId").closest('.col-md-4').removeClass('has-error');
+                                $("#editphoneId").closest('.col-md-4').addClass('has-success');
+                            }
+                            if(civility === "0") {
+                                $("#editCivilityId").closest('.col-md-4').addClass('has-error');
+                                $("#editCivilityId").after('<p class="text-danger">Champs vide</p>');
+                            }else {
+                                $("#editCivilityId").closest('.col-md-4').removeClass('has-error');
+                                $("#editCivilityId").closest('.col-md-4').addClass('has-success');
+                            }
+                            var edit_form_data = new FormData($('#editagentForm')[0]);
+
+                            if(firstName && lastName && phone && mat && startJobDate && birthDate !=""
+                            && civility && fonction && direction && statut && category !="0"){
+
+                                $.ajax({
+                                    url: window.origin+'/updateAgent',
+                                    type: 'POST',
+                                    data:edit_form_data,
+                                    processData : false,
+                                    contentType:false,
+                                    dataType: "json",
+                                    /* beforeSend: function() {
+                                     $('#editLoadingId').show();
+                                     },*/
+                                    success:function(response) {
+                                        //$('#editLoadingId').hide();
+                                        if(response.status === true) {
+                                             showUpdateToast();
+
+                                            $("#editAgentModal").modal("hide");
+                                            // reload the datatables
+                                            table.ajax.reload(null, false);
+                                            // remove the error
+                                            $(".form-group").removeClass('has-success').removeClass('has-error');
+                                            $(".text-danger").remove();
+
+                                            // remove the id
+                                            $("#devis_edit_id").remove();
+                                        } else {
+                                            showErrorToast();
+                                            $(".edit-messages").html('<div class="alert alert-danger alert-dismissible" role="alert">'+
+                                                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
+                                                    '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>'+response.message+
+                                                    '</div>')
+                                        }
+                                    },
+                                    error: function(jqXHR, textStatus, errorThrown){
+                                        /*  if(jqXHR.status ==403){
+                                         window.location = window.origin + "/spring-boot-apps/errorAuthorise";
+                                         }else {
+                                         window.location = window.origin + "/spring-boot-apps/pageError";
+                                         }   */                                 }
+                                }); // /ajax
+                            } // /if
+
+                            return false;
+                        });
+
+                    }
+                }); //fetch selected member info
+
+            } else {
+                alert("Error : Refresh the page again");
+            }
+        }
+
+        //FIN UPDATE DEVIS
+
+        //FUNCTION DELETE COMUNNE
+
+        function removeAgent(id){
+            if(id) {
+                // click on remove button
+                $("#removeBtn").unbind('click').bind('click', function() {
+                    $.ajax({
+                        url:window.origin+'/deleteAgent/'+id,
+                        type: 'delete',
+                        dataType: 'json',
+                        success:function(response) {
+                            if(response.status === true) {
+                                showDeleteToast();
+                                // refresh the table
+                                table.ajax.reload(null, false);
+                                // close the modal
+                                $("#removeAgentModal").modal('hide');
+
+                            } else {
+                                showErrorToast();
+                                $(".removeMessages").html('<div class="alert alert-danger alert-dismissible" role="alert">'+
+                                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
+                                        '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>'+response.message+
+                                        '</div>');
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown){
+                            /*if(jqXHR.status ==403){
+                             window.location = window.origin + "/spring-boot-apps/errorAuthorise";
+                             }else {
+                             window.location = window.origin + "/spring-boot-apps/pageError";
+                             }*/
+                        }
+                    });
+                }); // click remove btn
+            } else {
+                alert('Error: Refresh the page again');
+            }
+        }
+
+        //FIN DELETE DEVIS
+
+
+        //CIVILITY
+        function civilityOption(){
+            $.ajax({
+                url:window.origin+'/listCivility',
+                type:'GET',
+                dataType :"json",
+                success:function(response){
+                    $("#civilityId").html('');
+                    $("#civilityId").append('<option value='+0+'>'+' '+'</option>');
+                    $.each(response.data, function(key, val){
+                        $("#civilityId").append('<option value='+val.id+'>'+ val.name+'</option>');
+                    });
+                }
+            });
+        }
+        //FIN
+
+        //LIST typeLocater
+        function editCivilityOption(comId, comVal){
+            $.ajax({
+                url:window.origin+'/listCivility',
+                type:'GET',
+                dataType :"json",
+                success:function(response){
+                    $("#editCivilityId").html('');
+                    $("#editCivilityId").append('<option value='+comId+'>'+comVal+'</option>');
+                    $.each(response.data, function(key, val){
+                        if(comId!=val.id){
+                            $("#editCivilityId").append('<option value='+val.id+'>'+ val.name+ '</option>');
+                        }
+
+                    });
+                }
+            });
+        }
+        //FIN
+
+        //CIVILITY
+        function fonctionOption(){
+            $.ajax({
+                url:window.origin+'/listFonction',
+                type:'GET',
+                dataType :"json",
+                success:function(response){
+                    $("#fonctionId").html('');
+                    $("#fonctionId").append('<option value='+0+'>'+' '+'</option>');
+                    $.each(response.data, function(key, val){
+                        $("#fonctionId").append('<option value='+val.id+'>'+ val.name+'</option>');
+                    });
+                }
+            });
+        }
+        //FIN
+
+        //LIST typeLocater
+        function editFonctionOption(comId, comVal){
+            $.ajax({
+                url:window.origin+'/listFonction',
+                type:'GET',
+                dataType :"json",
+                success:function(response){
+                    $("#editfonctionId").html('');
+                    $("#editfonctionId").append('<option value='+comId+'>'+comVal+'</option>');
+                    $.each(response.data, function(key, val){
+                        if(comId!=val.id){
+                            $("#editfonctionId").append('<option value='+val.id+'>'+ val.name+ '</option>');
+                        }
+
+                    });
+                }
+            });
+        }
+        //FIN
+
+
+        function categoryOption(){
+        $.ajax({
+            url:window.origin+'/listCategory',
+            type:'GET',
+            dataType :"json",
+            success:function(response){
+                $("#categoryId").html('');
+                $("#categoryId").append('<option value='+0+'>'+' '+'</option>');
+                $.each(response.data, function(key, val){
+                    $("#categoryId").append('<option value='+val.id+'>'+ val.name+'</option>');
+                });
+            }
+        });
+        }
+        //FIN
+
+        //LIST typeLocater
+        function editCategoryOption(comId, comVal){
+            $.ajax({
+                url:window.origin+'/listCategory',
+                type:'GET',
+                dataType :"json",
+                success:function(response){
+                    $("#editcategoryId").html('');
+                    $("#editcategoryId").append('<option value='+comId+'>'+comVal+'</option>');
+                    $.each(response.data, function(key, val){
+                        if(comId!=val.id){
+                            $("#editcategoryId").append('<option value='+val.id+'>'+ val.name+ '</option>');
+                        }
+
+                    });
+                }
+            });
+        }
+        //FIN
+
+        function directionOption(){
+            $.ajax({
+                url:window.origin+'/listDirection',
+                type:'GET',
+                dataType :"json",
+                success:function(response){
+                    $("#directionId").html('');
+                    $("#directionId").append('<option value='+0+'>'+' '+'</option>');
+                    $.each(response.data, function(key, val){
+                        $("#directionId").append('<option value='+val.id+'>'+ val.name+'</option>');
+                    });
+                }
+            });
+        }
+        //FIN
+
+        //LIST typeLocater
+        function editDirectionOption(comId, comVal){
+            $.ajax({
+                url:window.origin+'/listDirection',
+                type:'GET',
+                dataType :"json",
+                success:function(response){
+                    $("#editdirectionId").html('');
+                    $("#editdirectionId").append('<option value='+comId+'>'+comVal+'</option>');
+                    $.each(response.data, function(key, val){
+                        if(comId!=val.id){
+                            $("#editdirectionId").append('<option value='+val.id+'>'+ val.name+ '</option>');
+                        }
+
+                    });
+                }
+            });
+        }
+        //FIN
+
+
+        function statutOption(){
+            $.ajax({
+                url:window.origin+'/listStatut',
+                type:'GET',
+                dataType :"json",
+                success:function(response){
+                    $("#statutId").html('');
+                    $("#statutId").append('<option value='+0+'>'+' '+'</option>');
+                    $.each(response.data, function(key, val){
+                        $("#statutId").append('<option value='+val.id+'>'+ val.name+'</option>');
+                    });
+                }
+            });
+        }
+        //FIN
+
+        //LIST typeLocater
+        function editStatutOption(comId, comVal){
+            $.ajax({
+                url:window.origin+'/listStatut',
+                type:'GET',
+                dataType :"json",
+                success:function(response){
+                    $("#editstatutId").html('');
+                    $("#editstatutId").append('<option value='+comId+'>'+comVal+'</option>');
+                    $.each(response.data, function(key, val){
+                        if(comId!=val.id){
+                            $("#editstatutId").append('<option value='+val.id+'>'+ val.name+ '</option>');
+                        }
+
+                    });
+                }
+            });
+        }
+        //FIN
+
+
+
+    </script>
+</head>
+<style>
+    .hvr-shrinks:hover {
+        /* L'image est grossie de 25% */
+        -webkit-transform:scale(5.1); /* Safari et Chrome */
+        -moz-transform:scale(5.1); /* Firefox */
+        -ms-transform:scale(5.1); /* Internet Explorer 9 */
+        -o-transform:scale(5.1); /* Opera */
+        transform:scale(5.1);
+
+        /* La transition s'applique à la fois sur la largeur et la hauteur, avec une durée d'une seconde. */
+        -webkit-transition: all 1s ease; /* Safari et Chrome */
+        -moz-transition: all 1s ease; /* Firefox */
+        -ms-transition: all 1s ease; /* Internet Explorer 9 */
+        -o-transition: all 1s ease; /* Opera */
+        transition: all 1s ease;
+        z-index: 1050;
+    }
+
+    .hvr-shrink:hover {
+        /* L'image est grossie de 25% */
+        -webkit-transform:scale(1.5); /* Safari et Chrome */
+        -moz-transform:scale(1.5); /* Firefox */
+        -ms-transform:scale(1.5); /* Internet Explorer 9 */
+        -o-transform:scale(1.5); /* Opera */
+        transform:scale(1.5);
+        /* La transition s'applique à la fois sur la largeur et la hauteur, avec une durée d'une seconde. */
+        -webkit-transition: all 1s ease; /* Safari et Chrome */
+        -moz-transition: all 1s ease; /* Firefox */
+        -ms-transition: all 1s ease; /* Internet Explorer 9 */
+        -o-transition: all 1s ease; /* Opera */
+        transition: all 1s ease;
+        z-index: 1050;
+    }
+</style>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <!-- Navbar -->
+    <div th:replace="layouts/header :: client_header"></div>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <div th:replace="layouts/nav :: client_nav"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Liste Agent</h1>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <!-- /.card -->
+
+                    <div class="card">
+                        <div class="card-header">
+                            <button class="btn btn-success" data-toggle="modal" data-target="#addagentModal" id="btnAddNew"><i class="fa fa-plus"></i>Ajouter</button>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="responsive-data-table">
+                                <table id="agentTable" class="table dt-responsive nowrap table-hover  table-striped" >
+                                    <thead class="bg-navy">
+                                    <tr>
+                                        <th><input name="select_all" value="1" type="checkbox"></th>
+                                        <th>Date création</th>
+                                        <th>Matricule</th>
+                                        <th>Nom</th>
+                                        <th>Prénom</th>
+                                        <th>Date Naissance</th>
+                                        <th>Telephone</th>
+                                        <th>Statut</th>
+                                        <th>Age(ans)</th>
+                                        <th>Fonction</th>
+                                        <th>Categorie Professionnelle</th>
+                                        <th>Direction/Plates Forme</th>
+                                        <th>Email</th>
+                                        <th data-priority="1">Photo</th>
+                                        <th data-priority="2">Action</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th>Date création</th>
+                                        <th>Matricule</th>
+                                        <th>Nom</th>
+                                        <th>Prénom</th>
+                                        <th>Date Naissance</th>
+                                        <th>Telephone</th>
+                                        <th>Statut</th>
+                                        <th>Age(ans)</th>
+                                        <th>Fonction</th>
+                                        <th>Categorie Professionnelle</th>
+                                        <th>Direction/Plates Forme</th>
+                                        <th>Email</th>
+                                        <th data-priority="1">Photo</th>
+                                        <th data-priority="2">Action</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <div th:replace="layouts/footer :: client_footer"></div>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- Add Agent Modal-->
+<div class="modal fade large" id="addagentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-teal">
+                <h5 class="modal-title" id="exampleModalLabel">Ajouter Agent</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--FORMULIARE-->
+                <form id="agentFormId" enctype="multipart/form-data" autocomplete="off">
+
+                    <div class="messages"></div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Genre</label>
+                            <div class="col-md-12">
+                                <select class="form-control" id="civilityId" name="civility">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Matricule</label>
+                            <div class="col-md-12">
+                                <input name="matricule" id="matriculeId" class="form-control" type="text">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Nom</label>
+                            <div class="col-md-12">
+                                <input name="firstName" id="firstNameId" class="form-control" type="text">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Prénom</label>
+                            <div class="col-md-12">
+                                <input name="lastName" id="lastNameId" class="form-control" type="text">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Telephone</label>
+                            <div class="input-group col-md-12">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                </div>
+                                <input name="phone" id="phoneId" class="form-control" type="text" data-inputmask='"mask": "+225 99-99-99-99"' data-mask>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Email</label>
+                            <div class="input-group col-md-12">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                                </div>
+                                <input class="form-control" id="emailId" name="email" type="text" placeholder="Email">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <label class="control-label col-md-12">Date Naissance</label>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="text" id="birthDateId" name="birthDate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Date Embauche</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="text" id="startJobDateId" name="startJobDate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Categorie Professionnelle</label>
+                            <div class="col-md-12">
+                                <select class="form-control select2" id="categoryId" name="category"></select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Fonction</label>
+                            <div class="col-md-12">
+                                <select class="form-control select2" id="fonctionId" name="fonction"></select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Direction</label>
+                            <div class="col-md-12">
+                                <select class="form-control select2" id="directionId" name="direction"></select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Statut</label>
+                            <div class="col-md-12">
+                                <select class="form-control select2" id="statutId" name="statut"></select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Membre Sodexam</label>
+                            <div class="col-md-12">
+                                <select class="form-control select2" id="memberId" name="member">
+                                    <option value="1">OUI</option>
+                                    <option value="1">NON</option>
+                                </select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </div></br></br>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Photo Agent</label>
+                            <div class="col-md-12">
+                                <input type="file" name="picture" id="pictureId" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" id="dd" type="submit"><i class="fa fa-check"></i>Enregistrer</button>
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin add Agent -->
+
+<!-- Edit product Modal-->
+
+<div class="modal fade large" id="editAgentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-teal">
+                <h5 class="modal-title" id="exampleModalLabels">Ajouter Agent</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--FORMULIARE-->
+                <form id="editagentForm" enctype="multipart/form-data" autocomplete="off">
+
+                    <div class="edit-messages"></div>
+
+                    <div class="form-group">
+                        <div class="" id="editPictureId">
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Genre</label>
+                            <div class="col-md-12">
+                                <select class="form-control" id="editCivilityId" name="civility">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Matricule</label>
+                            <div class="col-md-12">
+                                <input name="matricule" id="editmatriculeId" class="form-control" type="text">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Nom</label>
+                            <div class="col-md-12">
+                                <input name="firstName" id="editfirstNameId" class="form-control" type="text">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Prénom</label>
+                            <div class="col-md-12">
+                                <input name="lastName" id="editlastNameId" class="form-control" type="text">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Telephone</label>
+                            <div class="input-group col-md-12">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                </div>
+                                <input name="phone" id="editphoneId" class="form-control" type="text" data-inputmask='"mask": "+225 99-99-99-99"' data-mask>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Email</label>
+                            <div class="input-group col-md-12">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-envelope"></i></span>
+                                </div>
+                                <input class="form-control" id="editemailId" name="email" type="text" placeholder="Email">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <label class="control-label col-md-12">Date Naissance</label>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="text" id="editbirthDateId" name="birthDate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Date Embauche</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input type="text" id="editstartJobDateId" name="startJobDate" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Categorie Professionnelle</label>
+                            <div class="col-md-12">
+                                <select class="form-control select2" id="editcategoryId" name="category"></select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Fonction</label>
+                            <div class="col-md-12">
+                                <select class="form-control select2" id="editfonctionId" name="fonction"></select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Direction</label>
+                            <div class="col-md-12">
+                                <select class="form-control select2" id="editdirectionId" name="direction"></select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Statut</label>
+                            <div class="col-md-12">
+                                <select class="form-control select2" id="editstatutId" name="statut"></select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label class="control-label col-md-12">Membre Sodexam</label>
+                            <div class="col-md-12">
+                                <select class="form-control select2" id="editmemberId" name="member">
+                                    <option value="1">OUI</option>
+                                    <option value="1">NON</option>
+                                </select>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                    </div></br></br>
+
+                    <div class="row">
+                    <div class="col-sm-6">
+                        <label class="control-label col-md-12">Photo Agent</label>
+                        <div class="col-md-12">
+                            <input type="file" name="editPicture" id="editPicture" class="form-control">
+                        </div>
+                    </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" id="btnUpdateagentId" type="submit"><i class="fa fa-check"></i>Enregistrer</button>
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin update Agent -->
+
+
+<!-- delete product modal-->
+<div class="modal fade" id="removeAgentModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header bg-teal">
+                <h4 class="modal-title" id="defaultModalLabel">
+                    Supprimer Agent</h4>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="removeMessages"></div>
+                Voulez vous supprimer cette ligne?
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="removeBtn"  class="btn btn-success ">Supprimer</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Fin modal delete-->
+
+</body>
+</html>
