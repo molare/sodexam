@@ -43,16 +43,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //super.configure(auth);
-        /*auth.inMemoryAuthentication().withUser("admin").password("{noop}1234").roles("ADMIN","USER");
-        auth.inMemoryAuthentication().withUser("mory").password("{noop}12345").roles("USER");*/
+        auth.inMemoryAuthentication().withUser("admin").password("{noop}1234").roles("ADMIN","USER");
+        auth.inMemoryAuthentication().withUser("mory").password("{noop}12345").roles("USER");
      // auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
 
-      auth.jdbcAuthentication().dataSource(dataSource)
+      /*auth.jdbcAuthentication().dataSource(dataSource)
               .usersByUsernameQuery("SELECT username AS principal, password AS credentials,active FROM users " +
                       "WHERE UPPER(username) = UPPER(?) AND active is true")
               .authoritiesByUsernameQuery("SELECT u.username, r.name FROM users u, role r " +
                       "WHERE u.role_id = r.id " +
-                      "AND u.username=?").rolePrefix("ROLE_");
+                      "AND u.username=?").rolePrefix("ROLE_");*/
 
   }
 
