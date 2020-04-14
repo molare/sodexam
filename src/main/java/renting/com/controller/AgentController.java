@@ -72,7 +72,9 @@ public class AgentController {
             c.setDirectionTransient(co.getDirection().getName());
             c.setCategoryTransient(co.getCategory().getName());
             String[] ageTab = co.getBirthDate().split("/");
+            String[] yearTab = co.getStartJobDate().split("/");
             c.setAge(Integer.parseInt(dateTab[2])-Integer.parseInt(ageTab[2]));
+            c.setNumberYearJob(Integer.parseInt(dateTab[2])-Integer.parseInt(yearTab[2]));
 
 
             String act="<td>\n" +

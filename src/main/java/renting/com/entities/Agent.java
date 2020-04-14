@@ -95,7 +95,7 @@ public class Agent implements Serializable {
     private int age;
 
     @Transient
-    private String numberYearJob;
+    private int numberYearJob;
 
     @Transient
     private String action;
@@ -280,11 +280,11 @@ public class Agent implements Serializable {
         this.age = age;
     }
 
-    public String getNumberYearJob() {
+    public int getNumberYearJob() {
         return numberYearJob;
     }
 
-    public void setNumberYearJob(String numberYearJob) {
+    public void setNumberYearJob(int numberYearJob) {
         this.numberYearJob = numberYearJob;
     }
 

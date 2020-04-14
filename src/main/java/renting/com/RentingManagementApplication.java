@@ -12,11 +12,11 @@ public class RentingManagementApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RentingManagementApplication.class, args);
-		try {
+		/*try {
 			openHomePages();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 
 	}
 	private static void openHomePages() throws IOException {
