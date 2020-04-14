@@ -12,21 +12,21 @@
     function showAddToast() {
         Toast.fire({
             type: 'success',
-            title: 'enregistrement reussit avec succes.'
+            title: 'enregistrement de donnee avec succes.'
         })
     };
 
 function showUpdateToast() {
     Toast.fire({
         type: 'success',
-        title: 'Modification reussit avec succes.',
+        title: 'Modification de donnee avec succes.',
     })
 };
 
 function showDeleteToast() {
     Toast.fire({
         type: 'success',
-        title: 'Suppression reussit avec succes.'
+        title: 'Suppression de donnee avec succes.'
     })
 };
 function showErrorToast() {
