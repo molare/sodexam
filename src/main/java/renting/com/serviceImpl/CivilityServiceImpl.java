@@ -1,7 +1,7 @@
 package renting.com.serviceImpl;
 
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+/*import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;*/
 import renting.com.entities.Civility;
 import renting.com.repositories.CivilityRepository;
 import renting.com.service.CivilityService;
@@ -17,8 +17,8 @@ import java.util.List;
 public class CivilityServiceImpl implements CivilityService {
     @Autowired
     private CivilityRepository civilityRepository;
-    @Autowired
-    private JavaMailSender javaMailSender;
+    /*@Autowired
+    private JavaMailSender javaMailSender;*/
 
     @Override
     public List<Civility> getAll() {
@@ -53,7 +53,7 @@ public class CivilityServiceImpl implements CivilityService {
     @Override
     public void sendmail(String toEmail, String subject, String message) {
 
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
+       /* SimpleMailMessage mailMessage = new SimpleMailMessage();
 
         mailMessage.setTo(toEmail);
         mailMessage.setSubject(subject);
@@ -61,6 +61,6 @@ public class CivilityServiceImpl implements CivilityService {
 
         mailMessage.setFrom("morysangare67@gmail.com");
 
-        javaMailSender.send(mailMessage);
+        javaMailSender.send(mailMessage);*/
     }
 }
